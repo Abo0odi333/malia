@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة اختبارات المعرفة المالية التفاعلية</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f2f1;
+            margin: 0;
+            padding: 20px;
+            color: #323130;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border-top: 10px solid #107c41;
+        }
+        .header {
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #edebe9;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #107c41;
+            font-size: 28px;
+        }
+        .header p {
+            margin: 0;
+            color: #605e5c;
+            font-size: 15px;
+        }
+        .paper-selector {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .paper-selector h2 {
+            color: #323130;
+            margin-bottom: 25px;
+            font-size: 20px;
+        }
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .btn-paper {
+            background-color: #ffffff;
+            color: #107c41;
+            border: 2px solid #107c41;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-paper:hover {
+            background-color: #107c41;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .quiz-section {
+            display: none;
+        }
+        .score-card {
+            display: none;
+            margin: 20px 30px;
+            padding: 20px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .score-card h2 {
+            margin: 0 0 10px 0;
+            color: #166534;
+        }
+        .question-block {
+            padding: 25px 30px;
+            border-bottom: 1px solid #f3f2f1;
+        }
+        .question-text {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .option-item:hover {
+            background-color: #f8f9fa;
+            border-color: #a1a1a1;
+        }
+        .option-item input {
+            margin-left: 12px;
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+        .footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .btn {
+            background-color: #107c41;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background-color: #0b592e;
+        }
+        .btn-nav {
+            background-color: #6c757d;
+        }
+        .btn-nav:hover {
+            background-color: #5a6268;
+        }
+        .correct-answer {
+            background-color: #d1fae5 !important;
+            border-color: #34d399 !important;
+            color: #065f46;
+        }
+        .correct-answer::after {
+            content: " ✓ إجابة صحيحة";
+            font-weight: bold;
+            margin-right: auto;
+            color: #10b981;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important;
+            border-color: #f87171 !important;
+            color: #991b1b;
+        }
+        .wrong-answer::after {
+            content: " ✗ إجابتك خاطئة";
+            font-weight: bold;
+            margin-right: auto;
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>منصة اختبارات المعرفة المالية</h1>
+        <p id="subTitle">مرحباً بك! اختر ورقة العمل التي ترغب في اختبار نفسك بها للبدء فوراً.</p>
+    </div>
+
+    <div id="paperSelector" class="paper-selector">
+        <h2>الرجاء تحديد ورقة الاختبار:</h2>
+        <div class="grid-buttons">
+            <button class="btn-paper" onclick="startQuiz(1)">ورقة العمل الأولى</button>
+            <button class="btn-paper" onclick="startQuiz(2)">ورقة العمل الثانية</button>
+            <button class="btn-paper" onclick="startQuiz(3)">ورقة العمل الثالثة</button>
+            <button class="btn-paper" onclick="startQuiz(4)">ورقة العمل الرابعة</button>
+        </div>
+    </div>
+
+    <div id="quizSection" class="quiz-section">
+        <div id="scoreCard" class="score-card"></div>
+        <form id="quizForm">
+            <div id="questionsContainer"></div>
+            <div class="footer">
+                <button type="button" id="submitBtn" class="btn" onclick="checkAnswers()">إرسال الأجوبة</button>
+                <button type="button" id="retryBtn" class="btn" style="display:none;" onclick="resetQuiz()">إعادة اختبار هذه الورقة</button>
+                <button type="button" id="backBtn" class="btn btn-nav" onclick="goBackToMenu()">العودة للرئيسية</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // تجميع كافة بيانات الأوراق الأربعة بناءً على الصور المرفقة بدقة
+    const allPapers = {
+        1: [
+            { q: "من المهم أن تبدأ بالتخطيط لمهنة المستقبل أثناء دراستك في المدرسة.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "لا تترتب أي سلبيات على كونك رائد أعمال.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "تتمثل إحدى مزايا تقاضي أجر بالساعة في حصولك على دخل منتظم.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "تتأثر أسعار السوق بالتكاليف فقط، وليس بالمنافسة.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "إن أفضل وقت للتسوق هو عندما تكون سعيداً جداً.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "من المفيد تحديد معايير عملية الشراء الخاصة بك.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "أي مما يلي يُعد مثالاً على التدريب أثناء العمل؟", options: ["استخدام برامج الفيديو التعليمية", "الذهاب إلى المدرسة", "اتباع تعليمات المشرف الخاص بك"], correct: 2 },
+            { q: "في أي من الأدوار الوظيفية التالية يشكّل الدفع بالعمولة حافزاً إيجابياً؟", options: ["المعلّم", "الطبيب", "مندوب مبيعات"], correct: 2 },
+            { q: "أي مما يلي لا يُعد قيمة إيجابية؟", options: ["الوفاء", "النزاهة", "التلاعب"], correct: 2 },
+            { q: "أي مما يلي يُعد مثالاً على ما يمكن شراؤه بواسطة الدخل المتاح للإنفاق؟", options: ["المسكن", "المياه", "هاتف ذكي جديد"], correct: 2 },
+            { q: "أي مما يلي يُعد مثالاً على الرغبات؟", options: ["المياه", "الغذاء", "العطلة"], correct: 2 },
+            { q: "عند التخطيط لعملية الشراء، يجب:", options: ["ألا يكون لديك أدنى فكرة عما تريده", "ألا تحدد الميزانية", "أن تفكر في كيفية دفع تكلفة الغرض"], correct: 2 }
+        ],
+        2: [
+            { q: "الصكوك والسندات هي أدوات استثمار قصيرة الأجل.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "يُعد الاحتفاظ بسجلات دقيقة خطوة مهمة.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "تشير سلامة المبلغ الأصلي إلى الاستثمار في استثمارات خطيرة.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "تاسي هي شركة سوق الأسهم السعودية.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "تملك الاستثمارات قصيرة الأجل مستوى مرتفعاً من المخاطر ومستوى منخفضاً من أمان رأس المال.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "إن الأصول المتناقصة القيمة تكتسب القيمة مع مرور الوقت.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "أي مما يلي لا يُعد أحد عوامل نمط الحياة؟", options: ["التفضيلات", "العادات", "التعليم"], correct: 2 },
+            { q: "أي مما يلي لا يُعد سبباً لادخار المال؟", options: ["تملك المال لنفقات غير مخطط لها", "يتوفر المال للحالات الطارئة", "ترغب في إنفاق كل أموالك اليوم"], correct: 2 },
+            { q: "أي مما يلي لا يُعد هدفاً رئيساً للاستثمار؟", options: ["الدخل", "سلامة رأس المال", "سلامة صحتك"], correct: 2 },
+            { q: "أي مما يلي لا يمثل إحدى المشكلات قصيرة الأجل الشائعة التي تسببها سرقة الهوية؟", options: ["خسارة الأموال من حساباتك", "تغيير البنوك", "صعوبة التقدم بطلب للحصول على رهن عقاري"], correct: 2 },
+            { q: "التظاهر أو الادعاء خلافاً لما هو عليه في الواقع:", options: ["المحتال", "المخترق", "الاحتيال"], correct: 2 },
+            { q: "أحداث غير مخطط لها أو غير متوقعة:", options: ["السيولة", "الاستثمار", "حالات الطوارئ"], correct: 2 }
+        ],
+        3: [
+            { q: "يُسمّى الشخص الذي يأخذ المال بشكل مؤقت من بنك أو مؤسسة مالية المقترض.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "لا تترتب أي سلبيات على استخدام الائتمان.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "تُعد بطاقة مدى من بطاقات الائتمان.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "قد تؤثر سرقة الهوية سلباً على درجتك الائتمانية.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "يهدف الائتمان إلى تمكين المشترين من شراء أغراضهم، ودفع ثمنها فوراً.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "من المهم استخدام الائتمان بطريقة مسؤولة.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "أي مما يلي لا يُعد من مزايا الائتمان؟", options: ["تكلفة رسوم أقل", "قيمة الائتمان المتاح", "وظيفة براتب أعلى"], correct: 2 },
+            { q: "أي مما يلي لا يُعد من الميزات المتاحة لحاملي بطاقات الائتمان؟", options: ["النقاط", "الاسترداد النقدي", "عدم فرض أي رسوم"], correct: 2 },
+            { q: "أي مما يلي لا يُعد خطوة مناسبة عند الاستعداد للحصول على بطاقة ائتمان؟", options: ["فتح حساب جارٍ", "إدارة حسابك بحذر", "عدم امتلاك مصدر دخل"], correct: 2 },
+            { q: "منظمة أو شخص يُقرض المال لشخص آخر:", options: ["القرض الاستهلاكي", "الائتمان", "المُقرض"], correct: 2 },
+            { q: "أي مما يلي لا يُعد من إيجابيات الائتمان؟", options: ["الملاءمة", "الأمان", "تراجع القدرة الشرائية المستقبلية"], correct: 2 },
+            { q: "أي مما يلي لا يُعد من مزايا بطاقات الائتمان؟", options: ["الخصومات في بعض المتاجر", "تأمين السفر حول العالم", "الرسوم المستحقة"], correct: 2 }
+        ],
+        4: [
+            { q: "يساهم التضخم في زيادة تكلفة منتج ما مع مرور الوقت.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "تضمن لك الخطة المالية عدم الإفراط في الإنفاق.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "من المهم حفظ السجلات في مكان آمن لحمايتها من الحريق.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 0 },
+            { q: "يتطلب التخطيط المالي التزاماً قصير الأجل.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "توضح الميزانية المبلغ الذي كسبته العام الماضي.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "توضح الأهداف الشخصية كيف ستموّل أهدافك المالية.", options: ["عبارة صحيحة", "عبارة خاطئة"], correct: 1 },
+            { q: "أي مما يلي لا يؤثر على الناتج المحلي الإجمالي؟", options: ["مشتريات المستهلك", "السلع المصدرة", "السلع المستوردة"], correct: 2 },
+            { q: "أي مما يلي لا يتعلق بخطوات إعداد الميزانية؟", options: ["إدراج الدخل المقدر", "إعداد خطة مالية", "تسجيل الأرقام الفعلية"], correct: 1 },
+            { q: "أي مما يلي لا يُعد قيمة إيجابية؟", options: ["الوفاء", "النزاهة", "التلاعب"], correct: 2 },
+            { q: "أي مما يلي لا يعتبر من سلبيات استخدام السجلات اليدوية؟", options: ["يصعب إجراء تغييرات دقيقة", "تحتاج إلى مساحة كبيرة", "يمكن أن يتم اختراقها"], correct: 2 },
+            { q: "أي مما يلي لا يعتبر مثالاً على الهدف الشخصي؟", options: ["امتلاك سيارة", "امتلاك منزل", "دفع الرسوم الدراسية"], correct: 2 },
+            { q: "سيرتفع مستوى معيشتك في حال كانت زيادة راتبك ______ من معدل التضخم.", options: ["تساوي", "أقل", "أعلى"], correct: 2 }
+        ]
+    };
+
+    let currentPaper = null;
+
+    function startQuiz(paperNumber) {
+        currentPaper = paperNumber;
+        document.getElementById('paperSelector').style.display = 'none';
+        document.getElementById('quizSection').style.display = 'block';
+        document.getElementById('subTitle').innerText = `أنت الآن تختبر: ورقة العمل رقم (${paperNumber})`;
+        
+        loadQuestions();
+    }
+
+    function loadQuestions() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+        const questions = allPapers[currentPaper];
+
+        questions.forEach((item, qIndex) => {
+            let optionsHtml = '';
+            item.options.forEach((opt, oIndex) => {
+                optionsHtml += `
+                    <label class="option-item" id="label-${qIndex}-${oIndex}">
+                        <input type="radio" name="question-${qIndex}" value="${oIndex}" required>
+                        <span>${opt}</span>
+                    </label>
+                `;
+            });
+
+            container.innerHTML += `
+                <div class="question-block" id="block-${qIndex}">
+                    <div class="question-text">${qIndex + 1}. ${item.q}</div>
+                    <div class="options-list">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function checkAnswers() {
+        const questions = allPapers[currentPaper];
+        let score = 0;
+        let allAnswered = true;
+
+        for (let i = 0; i < questions.length; i++) {
+            const selected = document.querySelector(`input[name="question-${i}"]:checked`);
+            if (!selected) {
+                allAnswered = false;
+                break;
+            }
+        }
+
+        if (!allAnswered) {
+            alert("فضلاً، يرجى الإجابة على جميع الأسئلة قبل تقديم الإجابة.");
+            return;
+        }
+
+        questions.forEach((item, qIndex) => {
+            const selected = document.querySelector(`input[name="question-${qIndex}"]:checked`);
+            const answerIndex = parseInt(selected.value);
+
+            const inputs = document.querySelectorAll(`input[name="question-${qIndex}"]`);
+            inputs.forEach(input => input.disabled = true);
+
+            if (answerIndex === item.correct) {
+                score++;
+                document.getElementById(`label-${qIndex}-${answerIndex}`).classList.add('correct-answer');
+            } else {
+                document.getElementById(`label-${qIndex}-${answerIndex}`).classList.add('wrong-answer');
+                document.getElementById(`label-${qIndex}-${item.correct}`).classList.add('correct-answer');
+            }
+        });
+
+        const scoreCard = document.getElementById('scoreCard');
+        scoreCard.style.display = 'block';
+        scoreCard.innerHTML = `
+            <h2>نتيجتك في هذه الورقة هي: ${score} من أصل ${questions.length}</h2>
+            <p>النسبة المئوية المحققة: ${Math.round((score / questions.length) * 100)}%</p>
+        `;
+
+        document.getElementById('submitBtn').style.display = 'none';
+        document.getElementById('retryBtn').style.display = 'inline-block';
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetQuiz() {
+        document.getElementById('scoreCard').style.display = 'none';
+        document.getElementById('submitBtn').style.display = 'inline-block';
+        document.getElementById('retryBtn').style.display = 'none';
+        loadQuestions();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBackToMenu() {
+        document.getElementById('quizSection').style.display = 'none';
+        document.getElementById('paperSelector').style.display = 'block';
+        document.getElementById('scoreCard').style.display = 'none';
+        document.getElementById('submitBtn').style.display = 'inline-block';
+        document.getElementById('retryBtn').style.display = 'none';
+        document.getElementById('subTitle').innerText = "مرحباً بك! اختر ورقة العمل التي ترغب في اختبار نفسك بها للبدء فوراً.";
+        currentPaper = null;
+    }
+</script>
+
+</body>
+</html>
